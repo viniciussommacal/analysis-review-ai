@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\ProductRepository;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProductService
 {
@@ -16,9 +17,7 @@ class ProductService
 
     public function createProduct($data)
     {
-        $product = $this->productService->save($data);
-
-        return $product;
+        return $this->productService->save($data);
     }
 
     public function getAllProducts()
@@ -30,30 +29,36 @@ class ProductService
     {
         $product = $this->productService->getById($id);
 
-        if (empty($product)) {
-            throw new ModelNotFoundException("Product not found.");
+        if (!$product) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Product not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         return $product;
     }
 
-    public function updateproduct($id, $data)
+    public function updateProduct($id, $data)
     {
         $product = $this->productService->getById($id);
 
-        if (empty($product)) {
-            throw new ModelNotFoundException("Product not found.");
+        if (!$product) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Product not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         return $this->productService->update($id, $data);
     }
 
-    public function deleteproduct($id)
+    public function deleteProduct($id)
     {
         $product = $this->productService->getById($id);
 
-        if (empty($product)) {
-            throw new ModelNotFoundException("Product not found.");
+        if (!$product) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Product not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         $this->productService->delete($id);

@@ -33,6 +33,7 @@ class ProductRepository
     public function delete(int $id): bool
     {
         $product = $this->getById($id);
+
         return $product->delete();
     }
 }

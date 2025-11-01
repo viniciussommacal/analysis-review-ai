@@ -33,6 +33,7 @@ class CategoryRepository
     public function delete(int $id): bool
     {
         $category = $this->getById($id);
+
         return $category->delete();
     }
 }

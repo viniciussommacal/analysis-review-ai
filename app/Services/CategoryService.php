@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\CategoryRepository;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoryService
 {
@@ -16,9 +17,7 @@ class CategoryService
 
     public function createCategory($data)
     {
-        $category = $this->categoryRepository->save($data);
-
-        return $category;
+        return $this->categoryRepository->save($data);
     }
 
     public function getAllCategories()
@@ -30,8 +29,10 @@ class CategoryService
     {
         $category = $this->categoryRepository->getById($id);
 
-        if (empty($category)) {
-            throw new ModelNotFoundException("Category not found.");
+        if (!$category) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Category not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         return $category;
@@ -41,8 +42,10 @@ class CategoryService
     {
         $category = $this->categoryRepository->getById($id);
 
-        if (empty($category)) {
-            throw new ModelNotFoundException("Category not found.");
+        if (!$category) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Category not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         return $this->categoryRepository->update($id, $data);
@@ -52,8 +55,10 @@ class CategoryService
     {
         $category = $this->categoryRepository->getById($id);
 
-        if (empty($category)) {
-            throw new ModelNotFoundException("Category not found.");
+        if (!$category) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Category not found.'
+            ], Response::HTTP_NOT_FOUND));
         }
 
         $this->categoryRepository->delete($id);

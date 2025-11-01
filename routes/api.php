@@ -5,6 +5,7 @@ use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\UserIsAdminMiddleware;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(JwtMiddleware::class)->group(function () {
@@ -12,6 +13,8 @@ Route::middleware(JwtMiddleware::class)->group(function () {
         Route::apiResource('category', CategoryController::class);
         Route::apiResource('product', ProductController::class)->except(['index', 'show']);
     });
+
+    Route::apiResource('review', ReviewController::class)->except(['index', 'show']);
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -19,4 +22,5 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::apiResource('review', ReviewController::class)->only(['index', 'show']);
 Route::apiResource('product', ProductController::class)->only(['index', 'show']);
