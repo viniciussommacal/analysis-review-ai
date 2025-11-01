@@ -1,3 +1,67 @@
+# 💬 API de Análise de Sentimento 🤖
+
+Uma **API REST** desenvolvida em **Laravel** que gerencia avaliações de produtos com **análise automática de sentimentos** usando **OpenAI**.
+
+---
+
+## 🌎 Visão Geral
+
+Este sistema permite que **usuários gerenciem produtos e avaliações**, com um recurso automatizado de **análise de sentimentos** que classifica comentários dos clientes em uma escala de **Péssimo a Excelente** ⭐.
+
+---
+
+## 🧩 Entidades Principais
+
+### 👤 Usuário  
+- Possui permissão (**Administrador/Cliente**)  
+- Pode criar avaliações  
+- Administradores podem gerenciar produtos e categorias  
+
+### 🗂️ Categoria  
+- Agrupa produtos relacionados  
+- Possui nome  
+- Só pode ser gerenciada por administradores  
+
+### 📦 Produto  
+- Pertence a uma categoria  
+- Possui nome, descrição e preço  
+- Pode receber avaliações dos clientes  
+- Só pode ser gerenciado por administradores  
+
+### 📝 Avaliação (Review)  
+- Contém o comentário de cliente (usuário)  
+- Possui uma **classificação gerada por IA (1-5)**, com base no comentário da avaliação  
+- Escala de classificação:  
+  - 💢 **1:** Péssimo  
+  - 😞 **2:** Ruim  
+  - 😐 **3:** Neutro  
+  - 🙂 **4:** Bom  
+  - 🤩 **5:** Excelente  
+
+---
+
+## 🧠 Análise de Sentimento
+
+O sistema utiliza um **job em background (`ProcessReviewJob`)** que:  
+1️⃣ Captura novas avaliações  
+2️⃣ Envia o comentário para a **API da OpenAI**  
+3️⃣ Analisa o sentimento  
+4️⃣ Atualiza a avaliação com uma **classificação automatizada**  
+
+A integração com **OpenAI** utiliza **GPT-3.5-turbo** para analisar o contexto do comentário e determinar o **nível de satisfação do cliente** 💭.
+
+---
+
+## ⚙️ Tecnologias Utilizadas
+
+- 🖥️ **Laravel 12**  
+- 🔐 **Autenticação JWT**  
+- 🗄️ **Banco de Dados SQLite**  
+- ⚡ **Sistema de Filas**  
+- 🤖 **Integração OpenAI**
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
