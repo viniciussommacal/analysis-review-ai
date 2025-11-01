@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Jobs\ProcessReviewJob;
 use Illuminate\Http\Response;
 use App\Repositories\ReviewRepository;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Exception;
 
 class ReviewService
 {
@@ -26,8 +28,11 @@ class ReviewService
         }
 
         $data['user_id'] = $user->id;
+        $review = $this->reviewRepository->save($data);
 
-        return $this->reviewRepository->save($data);
+        ProcessReviewJob::dispatch($review);
+
+        return $review;
     }
 
     public function getAllReviews()
@@ -68,7 +73,21 @@ class ReviewService
 
         $data['user_id'] = $user->id;
 
-        return $this->reviewRepository->update($id, $data);
+        $review = $this->reviewRepository->update($id, $data);
+
+        ProcessReviewJob::dispatch($review);
+
+        return $review;
+    }
+
+    public function updateRatingReview($id, $data) {
+        $review = $this->reviewRepository->getById($id);
+
+        if (empty($review)) {
+            throw new Exception("Review not found.");
+        }
+
+        $this->reviewRepository->update($id, $data);
     }
 
     public function deleteReview($id)

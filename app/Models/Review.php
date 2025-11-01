@@ -27,6 +27,8 @@ class Review extends Model
         'product'
     ];
 
+    protected $appends = ['rating_label'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -35,5 +37,17 @@ class Review extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function getRatingLabelAttribute(): string
+    {
+        return match ($this->rating) {
+            1 => 'Péssimo',
+            2 => 'Ruim',
+            3 => 'Neutro',
+            4 => 'Bom',
+            5 => 'Excelente',
+            default => 'Desconhecido',
+        };
     }
 }
